@@ -1,0 +1,5 @@
+/.env
+/config.ini
+/local_data
+/web_app.log
+/__pycache__

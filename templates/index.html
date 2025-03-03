@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ระบบจัดการข้อมูลนักศึกษา</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="https://cdn-icons-png.freepik.com/512/13320/13320393.png"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #1cc88a;
+            --danger-color: #e74a3b;
+            --warning-color: #f6c23e;
+            --info-color: #36b9cc;
+        }
+        
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Sarabun', sans-serif;
+        }
+        
+        .container {
+            max-width: 1140px;
+            margin-top: 30px;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #224abe 100%);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .page-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 100%;
+            background: url('https://cdn-icons-png.freepik.com/512/13320/13320393.png') no-repeat;
+            background-size: 80px;
+            background-position: center right 30px;
+            opacity: 0.2;
+        }
+        
+        .page-header h1 {
+            margin: 0;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .page-header h1 i {
+            margin-right: 15px;
+            font-size: 1.8rem;
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+        
+        .nav-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .nav-btn i {
+            margin-right: 10px;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 2rem 0 rgba(58, 59, 69, 0.15);
+        }
+        
+        .card-header {
+            background: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 20px 25px;
+            border-radius: 12px 12px 0 0 !important;
+        }
+        
+        .card-header h2 {
+            margin: 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-header h2 i {
+            margin-right: 12px;
+            color: var(--primary-color);
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        .form-control {
+            border-radius: 8px;
+            padding: 12px 15px;
+            border: 1px solid #e3e6f0;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+        }
+        
+        .btn {
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #224abe 100%);
+            border: none;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #13a673 100%);
+            border: none;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #dda20a 100%);
+            border: none;
+            color: #fff;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color) 0%, #be2617 100%);
+            border: none;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .alert i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .aws-status {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .aws-status i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .aws-connected {
+            color: #1cc88a;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .aws-connected i {
+            margin-right: 5px;
+        }
+        
+        .aws-disconnected {
+            color: #e74a3b;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .aws-disconnected i {
+            margin-right: 5px;
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table th {
+            font-weight: 600;
+            border-top: none;
+            background-color: #f8f9fc;
+            padding: 15px;
+            vertical-align: middle;
+        }
+        
+        .table td {
+            padding: 15px;
+            vertical-align: middle;
+        }
+        
+        .student-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .student-image:hover {
+            transform: scale(1.1);
+        }
+        
+        .no-image {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #f0f0f0 0%, #e6e6e6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-text {
+            color: #858796;
+            font-size: 0.85rem;
+        }
+        
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Custom Thai font */
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header fade-in">
+            <h1><i class="bi bi-mortarboard-fill"></i> ระบบจัดการข้อมูลนักศึกษา</h1>
+            <a href="/checked" class="btn btn-primary nav-btn">
+                <i class="bi bi-check2-square"></i> ไปยังหน้ารายงานการเช็คชื่อ
+            </a>
+        </div>
+        
+        <div class="aws-status fade-in">
+            <i class="bi bi-cloud-fill"></i> สถานะการเชื่อมต่อ AWS: 
+            {% if aws_connected %}
+                <span class="aws-connected"><i class="bi bi-check-circle-fill"></i> เชื่อมต่อแล้ว</span>
+            {% else %}
+                <span class="aws-disconnected"><i class="bi bi-x-circle-fill"></i> ไม่ได้เชื่อมต่อ</span>
+            {% endif %}
+        </div>
+        
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category if category != 'error' else 'danger' }} fade-in">
+                            {% if category == 'success' %}
+                                <i class="bi bi-check-circle-fill"></i>
+                            {% elif category == 'error' or category == 'danger' %}
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                            {% elif category == 'warning' %}
+                                <i class="bi bi-exclamation-circle-fill"></i>
+                            {% elif category == 'info' %}
+                                <i class="bi bi-info-circle-fill"></i>
+                            {% endif %}
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card fade-in">
+                    <div class="card-header">
+                        <h2 class="h5 mb-0"><i class="bi bi-image"></i> อัพโหลดรูปภาพนักศึกษา</h2>
+                    </div>
+                    <div class="card-body">
+                        <form action="/upload" method="POST" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="student_id" class="form-label">รหัสนักศึกษา</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">student_</span>
+                                    <input type="text" class="form-control" id="student_id" name="student_id" placeholder="เช่น 378">
+                                </div>
+                                <div class="form-text mt-2"><i class="bi bi-info-circle"></i> ระบบจะเพิ่ม "student_" ให้อัตโนมัติ</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="file" class="form-label">เลือกรูปภาพ</label>
+                                <input class="form-control" type="file" id="file" name="file" accept="image/png, image/jpeg, image/jpg">
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-cloud-arrow-up"></i> อัพโหลด
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card fade-in">
+                    <div class="card-header">
+                        <h2 class="h5 mb-0"><i class="bi bi-person-plus"></i> เพิ่มข้อมูลนักศึกษา</h2>
+                    </div>
+                    <div class="card-body">
+                        <form action="/add_student" method="POST">
+                            <div class="mb-3">
+                                <label for="add_student_id" class="form-label">รหัสนักศึกษา</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">student_</span>
+                                    <input type="text" class="form-control" id="add_student_id" name="student_id" placeholder="เช่น 378">
+                                </div>
+                                <div class="form-text mt-2"><i class="bi bi-info-circle"></i> ระบบจะเพิ่ม "student_" ให้อัตโนมัติ</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="student_name" class="form-label">ชื่อ-นามสกุล</label>
+                                <input type="text" class="form-control" id="student_name" name="student_name" placeholder="เช่น นายสมศรี มีใจ">
+                            </div>
+                            <div class="mb-3">
+                                <label for="student_class" class="form-label">รหัสชั้นเรียน</label>
+                                <input type="text" class="form-control" id="student_class" name="student_class" placeholder="เช่น 10301203">
+                            </div>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-plus-circle"></i> เพิ่มข้อมูล
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card fade-in">
+                    <div class="card-header">
+                        <h2 class="h5 mb-0"><i class="bi bi-arrow-repeat"></i> อัพเดทไฟล์ JSON</h2>
+                    </div>
+                    <div class="card-body">
+                        <form action="/update_json" method="POST">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-file-earmark-arrow-up"></i> อัพเดทไฟล์ students.json
+                            </button>
+                            <div class="form-text mt-2"><i class="bi bi-info-circle"></i> ใช้เมื่อมีการแก้ไขไฟล์ students.csv โดยตรง</div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card fade-in">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2 class="h5 mb-0"><i class="bi bi-people-fill"></i> รายชื่อนักศึกษา</h2>
+                <span class="badge bg-primary rounded-pill">
+                    <i class="bi bi-person"></i> {% if students %}{{ students|length }}{% else %}0{% endif %} คน
+                </span>
+            </div>
+            <div class="card-body">
+                {% if students %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th width="80"><i class="bi bi-image"></i> รูปภาพ</th>
+                                    <th><i class="bi bi-person-badge"></i> รหัสนักศึกษา</th>
+                                    <th><i class="bi bi-person"></i> ชื่อ-นามสกุล</th>
+                                    <th><i class="bi bi-grid-3x3"></i> รหัสชั้นเรียน</th>
+                                    <th width="100"><i class="bi bi-gear"></i> การจัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for student in students %}
+                                    <tr>
+                                        <td>
+                                            {% if student.id in image_urls %}
+                                                <img src="{{ image_urls[student.id] }}" alt="{{ student.name }}" class="student-image">
+                                            {% else %}
+                                                <div class="no-image">
+                                                    <i class="bi bi-person"></i>
+                                                </div>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ student.id }}</td>
+                                        <td>{{ student.name }}</td>
+                                        <td>{{ student.class }}</td>
+                                        <td>
+                                            <form action="{{ url_for('delete_student_route', student_id=student.id) }}" method="POST" onsubmit="return confirm('คุณต้องการลบข้อมูลนักศึกษานี้ใช่หรือไม่?');">
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="bi bi-trash"></i> ลบ
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle-fill"></i> ยังไม่มีข้อมูลนักศึกษา
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
